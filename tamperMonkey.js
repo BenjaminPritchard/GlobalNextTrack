@@ -1,10 +1,12 @@
 // ==UserScript==
-// @name         NextTrack
+// @name         GlobalNextTrack
 // @namespace    http://tampermonkey.net/
 // @version      0.1
 // @description  Connect to local Websocket host, and listen for commands to advance to next song...
 // @author       Benjamin Pritchard
-// @match        https://cpl-nml3-naxosmusiclibrary-com.ezproxy2.cpl.org/*
+// @match        https://cpl-nml3-naxosmusiclibrary-com.ezproxy2.cpl.org/* https://music.youtube.com/*
+// @match        https://music.youtube.com/*
+// @GitHub       https://github.com/BenjaminPritchard/GlobalNextTrack
 // @grant        none
 // ==/UserScript==
 
@@ -19,8 +21,7 @@
   };
 
   socket.onmessage = function (event) {
-    // I am not sure why the linter (prettier) formats code like this
-    // but who cares i guess.
+    // logic for naxos music library
     if (
       document.location.href.startsWith(
         "https://cpl-nml3-naxosmusiclibrary-com"
@@ -30,6 +31,13 @@
         document.getElementsByClassName("u-play-btn next")[0].click();
       if (event.data == "prev")
         document.getElementsByClassName("u-play-btn prev")[0].click();
+    }
+    // logic for youtube music
+    if (document.location.href.startsWith("https://music.youtube.com/")) {
+      if (event.data == "next")
+        document.getElementsByClassName("next-button")[0].click();
+      if (event.data == "prev")
+        document.getElementsByClassName("previous-button")[0].click();
     }
   };
 
